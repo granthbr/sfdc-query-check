@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:mongo="http://www.mulesoft.org/schema/mule/mongo"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:sfdc="http://www.mulesoft.org/schema/mule/sfdc"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/mongo http://www.mulesoft.org/schema/mule/mongo/current/mule-mongo.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/sfdc http://www.mulesoft.org/schema/mule/sfdc/current/mule-sfdc.xsd
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd">
+	<http:listener-config name="HTTP_Listener_Configuration"
+		host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration" />
+	<sfdc:config name="Salesforce__Basic_Authentication"
+		username="${sfdc.username}" password="${sfdc.password}" 
+		url="${sfdc.host}" doc:name="Salesforce: Basic Authentication" />
+	<flow name="sfdc-query-checkFlow">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/" doc:name="HTTP"/>
+        <sfdc:query config-ref="Salesforce__Basic_Authentication" query="dsql:SELECT Applicable_Partner_Discount__c,Approval_Reason__c,Category__c,Comp_Category_DELETE1__c,Compensation_Category_Product__c,CreatedById,CreatedDate,CurrencyIsoCode,DMAPP__AM_Solution__c,Delivery__c,Description,Discount_Approval_Tier_1_Threshold__c,Discount_Approval_Tier_2_Threshold__c,Discount_Approval_Tier_3_Threshold__c,Discount_Approval_Tier_4_Threshold__c,ELA__c,Family,Id,Include_in_AnyPoint_Percent_of_Total__c,Include_in_CloudHub_Percent_of_Total__c,Include_in_ESB_Percent_of_Total__c,Include_in_Platinum_Support__c,IsActive,IsDeleted,LastModifiedById,LastModifiedDate,LastReferencedDate,LastViewedDate,License_Type__c,Line_Item_Group__c,Name,Priced_As_Percent_of_Total__c,Priced_Per_Thousand_Impressions__c,ProductCode,Product_Family_Type__c,Product_ID__c,Product_Tier__c,Requires_Legal_Approval__c,SBQQ_Custom_ID__c,SBQQ_External_ID__c,SBQQ__AssetConversion__c,SBQQ__BatchQuantity__c,SBQQ__BlockPricingField__c,SBQQ__Component__c,SBQQ__CompoundDiscountRate__c,SBQQ__ConfigurationEvent__c,SBQQ__ConfigurationFieldSet__c,SBQQ__ConfigurationFields__c,SBQQ__ConfigurationFormTitle__c,SBQQ__ConfigurationType__c,SBQQ__ConfigurationValidator__c,SBQQ__ConfiguredCodePattern__c,SBQQ__ConfiguredDescriptionPattern__c,SBQQ__CostEditable__c,SBQQ__CustomConfigurationPage__c,SBQQ__CustomConfigurationRequired__c,SBQQ__DefaultPricingTable__c,SBQQ__DefaultQuantity__c,SBQQ__DescriptionLocked__c,SBQQ__DiscountCategory__c,SBQQ__DiscountSchedule__c,SBQQ__DynamicPricingConstraint__c,SBQQ__ExcludeFromMaintenance__c,SBQQ__ExcludeFromOpportunity__c,SBQQ__GenerateContractedPrice__c,SBQQ__HasConfigurationAttributes__c,SBQQ__Hidden__c,SBQQ__HidePriceInSearchResults__c,SBQQ__IncludeInMaintenance__c,SBQQ__NewQuoteGroup__c,SBQQ__NonDiscountable__c,SBQQ__NonPartnerDiscountable__c,SBQQ__OptionLayout__c,SBQQ__OptionSelectionMethod__c,SBQQ__Optional__c,SBQQ__PriceEditable__c,SBQQ__PricingMethodEditable__c,SBQQ__PricingMethod__c,SBQQ__ProductPictureID__c,SBQQ__QuantityEditable__c,SBQQ__QuantityScale__c,SBQQ__ReconfigurationDisabled__c,SBQQ__RenewalProduct__c,SBQQ__RenewalProduct__r,SBQQ__SortOrder__c,SBQQ__Specifications__c,SBQQ__SubscriptionBase__c,SBQQ__SubscriptionCategory__c,SBQQ__SubscriptionPercent__c,SBQQ__SubscriptionPricing__c,SBQQ__SubscriptionTarget__c,SBQQ__SubscriptionTarget__r,SBQQ__SubscriptionTerm__c,SBQQ__SubscriptionType__c,SBQQ__Taxable__c,SBQQ__TermDiscountLevel__c,SBQQ__TermDiscountSchedule__c,SBQQ__UpgradeCredit__c,SBQQ__UpgradeCredit__r,SBQQ__UpgradeSource__c,SBQQ__UpgradeSource__r,SBQQ__UpgradeTarget__c,SBQQ__UpgradeTarget__r,Status__c,Support_Level__c,SystemModstamp,Type__c,fieldsToNull FROM Product2 WHERE Product_ID__c = '02i800000036ETKAA2'" doc:name="SFDC-NewQuotes_ClosedWonOpp"/>
+        <logger message="#[payload]" level="INFO" doc:name="Logger"/>
+        <expression-component doc:name="Expression"><![CDATA[#[message.payload.hasNext() ? message.payload.next() : null]]]></expression-component>
+        <object-to-string-transformer doc:name="Object to String"/>
+        <logger message="#[payload]" level="INFO" doc:name="Logger"/>
+	</flow>
+    <flow name="sfdc-query-checkFlow1">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/put" doc:name="HTTP"/>
+        <scripting:transformer doc:name="Groovy">
+            <scripting:script engine="Groovy"><![CDATA[Map updateAccount = [
+	'Id':'',
+	'Account__c': '00129000009CK4s', 
+	'CSId__c': '12345',
+	'ProductionVcoresTotal__c':'2',
+	'SandboxVcoresTotal__c':'2'
+	];
+	
+	flowVars['updateAccount'] = [updateAccount];]]></scripting:script>
+        </scripting:transformer>
+        <sfdc:upsert config-ref="Salesforce__Basic_Authentication" externalIdFieldName="Id" type="AnypointOrganization__c" doc:name="Salesforce">
+            <sfdc:objects ref="#[flowVars.updateAccount]"/>
+        </sfdc:upsert>
+        <logger message="sfdc result #[payload]" level="INFO" doc:name="Copy_of_Logger"/>
+    </flow>
+    <flow name="sfdc-query-checkFlow2">
+        <poll doc:name="Poll">
+            <fixed-frequency-scheduler frequency="10" timeUnit="MINUTES"/>
+            <logger message="STARTING" level="INFO" doc:name="Logger"/>
+        </poll>
+        <set-payload value="{&quot;entitlements&quot;:&quot;mulemq,clustering,datamapper,sap-connector,hl7,siebel-connector,oracleebs-connector,peoplesoft-connector,api-gateway,epicbridges-connector,as2,ftps,x12,edifact,b2b&quot;,&quot;country&quot;:&quot;US&quot;,&quot;product&quot;:&quot;mule-ee&quot;,&quot;companyId&quot;:&quot;00129000009CK4sAAG&quot;,&quot;month&quot;:&quot;01&quot;,&quot;phone&quot;:&quot;123-321-4444&quot;,&quot;year&quot;:&quot;2019&quot;,&quot;name&quot;:&quot;jose&quot;,&quot;company&quot;:&quot;Jose's Cigar Bar&quot;,&quot;day&quot;:&quot;01&quot;,&quot;email&quot;:&quot;Fidel.castro@yahoo.com&quot;}" doc:name="JSON"/>
+        <logger message="******* Preceding license object data #[payload]" level="INFO" doc:name="Logger"/>
+        <dw:transform-message doc:name="Transform Message" metadata:id="92020db9-a830-436d-ba28-32d9d41c41a9">
+            <dw:input-payload mimeType="application/json"/>
+            <dw:set-payload><![CDATA[%dw 1.0
+%var dayformat = '/' ++ now.day ++ '/'
+%var nextYear = now.year as :number + 1
+%output application/java
+---
+{
+	Product__c:'02i800000036ETKAA2',
+	Expiration_Date__c: '2018-03-14' as :date,
+	Issue_Date__c: '2014-03-14' as :date,
+	License_Type__c:'Production'
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <logger message="Create Attachment Result is #[payload]" level="INFO" doc:name="Logger"/>
+        <sfdc:create-single config-ref="Salesforce__Basic_Authentication" type="License__c" doc:name="Salesforce"/>
+        <logger message="SFDC RESult #[payload]" level="INFO" doc:name="Logger"/>
+        
+        <!-- <custom-transformer class="com.mulesoft.licensegen.AttachmentToBase64Transformer" doc:name="Java"/>
+        <sfdc:create-single config-ref="Salesforce__Basic_Authentication" type="Attachment" doc:name="Salesforce"/> -->
+    </flow>
+</mule>
