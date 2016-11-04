@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE preferences SYSTEM 'http://java.sun.com/dtd/preferences.dtd'>
+
+<preferences EXTERNAL_XML_VERSION="1.0">
+    <root type="user">
+        <map/>
+        <node name="entitlement">
+            <map/>
+            <!-- No feature sets -->
+            <node name="basic">
+                <map/>
+            </node>                  
+            <!-- Galaxy Enterprise -->
+            <node name="galaxy-ee">
+                <map>
+                    <entry key="entitlement0" value="galaxy-ee"/>
+                </map>
+            </node>        
+            <node name="mulemq">
+                <map>
+                    <entry key="entitlement0" value="mulemq"/>
+                </map>
+            </node>
+
+            <!-- Tcat -->
+            <node name="tcat">
+                <map>                    
+                    <entry key="entitlement0" value="galaxy-ee"/>
+                    <entry key="entitlement1" value="tcat"/>
+                </map>
+            </node>
+            <!-- Mule clustering -->
+            <node name="clustering">
+                <map>
+                    <entry key="entitlement0" value="clustering"/>
+                </map>
+            </node>
+            <node name="sap-connector">
+                <map>
+                    <entry key="entitlement0" value="sap-connector"/>
+                </map>
+            </node>
+            <node name="hl7">
+                <map>
+                    <entry key="entitlement0" value="hl7"/>
+                </map>
+            </node>
+            <node name="datamapper">
+                <map>
+                    <entry key="entitlement0" value="datamapper"/>
+                </map>
+            </node>
+            <node name="service-registry">
+                <map>
+                    <entry key="entitlement0" value="service-registry"/>
+                </map>
+            </node>
+            <node name="siebel-connector">
+                <map>
+                    <entry key="entitlement0" value="siebel-connector"/>
+                </map>
+            </node>
+            <node name="oracleebs-connector">
+                <map>
+                    <entry key="entitlement0" value="oracleebs-connector"/>
+                </map>
+            </node>
+            <node name="peoplesoft-connector">
+                <map>
+                    <entry key="entitlement0" value="peoplesoft-connector"/>
+                </map>
+            </node>
+            <node name="api-gateway">
+                <map>
+                    <entry key="entitlement0" value="api-gateway"/>
+                </map>
+            </node>
+            <node name="epicbridges-connector">
+                <map>
+                    <entry key="entitlement0" value="epicbridges-connector"/>
+                </map>
+            </node>
+            <node name="as2">
+                <map>
+                    <entry key="entitlement0" value="as2"/>
+                </map>
+            </node>
+            <node name="ftps">
+                <map>
+                    <entry key="entitlement0" value="ftps"/>
+                </map>
+            </node>
+            <node name="x12">
+                <map>
+                    <entry key="entitlement0" value="x12"/>
+                </map>
+            </node>
+            <node name="edifact">
+                <map>
+                    <entry key="entitlement0" value="edifact"/>
+                </map>
+            </node>
+            <node name="b2b">
+                <map>
+                    <entry key="entitlement0" value="b2b"/>
+                </map>
+            </node>
+			
+            <!-- All entitlements -->
+            <node name="all">
+                <map>                    
+                    <entry key="entitlement0" value="galaxy-ee"/>
+                    <entry key="entitlement1" value="mulemq"/>
+                    <entry key="entitlement2" value="clustering"/>
+                    <entry key="entitlement3" value="sap-connector"/>
+                    <entry key="entitlement4" value="datamapper"/>
+                    <entry key="entitlement5" value="hl7"/>
+                    <entry key="entitlement6" value="service-registry"/>
+                    <entry key="entitlement7" value="siebel-connector"/>
+                    <entry key="entitlement8" value="oracleebs-connector"/>
+                    <entry key="entitlement9" value="peoplesoft-connector"/>
+                    <entry key="entitlement10" value="api-gateway"/>
+                    <entry key="entitlement11" value="epicbridges-connector"/>
+                    <entry key="entitlement11" value="as2"/>
+                    <entry key="entitlement12" value="ftps"/>
+                    <entry key="entitlement13" value="x12"/>
+                    <entry key="entitlement14" value="edifact"/>
+                    <entry key="entitlement15" value="b2b"/>
+                </map>
+            </node>
+            
+            <node name="tcat">
+                <map>                    
+                    <entry key="entitlement0" value="galaxy-ee-core"/>
+                    <entry key="entitlement1" value="tcat"/>
+                </map>
+            </node>
+            
+        </node>
+    </root>
+</preferences>
