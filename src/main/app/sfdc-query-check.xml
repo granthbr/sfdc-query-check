@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:context="http://www.springframework.org/schema/context" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:mongo="http://www.mulesoft.org/schema/mule/mongo"
-	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:sfdc="http://www.mulesoft.org/schema/mule/sfdc"
-	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+<mule xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking"
+	xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
+	xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata"
+	xmlns:mongo="http://www.mulesoft.org/schema/mule/mongo" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:sfdc="http://www.mulesoft.org/schema/mule/sfdc" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/mongo http://www.mulesoft.org/schema/mule/mongo/current/mule-mongo.xsd
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
@@ -14,25 +18,42 @@ http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mul
 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-current.xsd
 http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
 http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+
+	<context:property-placeholder
+		location="credentials.${mule.env}.properties,mule.${mule.env}.properties" />
+
+
 	<http:listener-config name="HTTP_Listener_Configuration"
 		host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration" />
 	<sfdc:config name="Salesforce__Basic_Authentication"
-		username="${sfdc.username}" password="${sfdc.password}" 
-		url="${sfdc.host}" doc:name="Salesforce: Basic Authentication" />
-    <context:property-placeholder location="mule.${mule.env}.properties"/>
-    <file:connector name="File" autoDelete="false" streaming="true" validateConnections="true" doc:name="File"/>
+		username="${sfdc.username}" password="${sfdc.password}" url="${sfdc.host}"
+		doc:name="Salesforce: Basic Authentication" />
+	<context:property-placeholder location="mule.${mule.env}.properties" />
+	<file:connector name="File" autoDelete="false"
+		streaming="true" validateConnections="true" doc:name="File" />
+    <http:request-config name="HTTP_Request_Configuration" host="0.0.0.0" port="8085" basePath="api" responseTimeout="300000" doc:name="HTTP Request Configuration"/>
 	<flow name="sfdc-query-checkFlow">
-        <http:listener config-ref="HTTP_Listener_Configuration" path="/" doc:name="HTTP"/>
-        <sfdc:query config-ref="Salesforce__Basic_Authentication" query="dsql:SELECT Applicable_Partner_Discount__c,Approval_Reason__c,Category__c,Comp_Category_DELETE1__c,Compensation_Category_Product__c,CreatedById,CreatedDate,CurrencyIsoCode,DMAPP__AM_Solution__c,Delivery__c,Description,Discount_Approval_Tier_1_Threshold__c,Discount_Approval_Tier_2_Threshold__c,Discount_Approval_Tier_3_Threshold__c,Discount_Approval_Tier_4_Threshold__c,ELA__c,Family,Id,Include_in_AnyPoint_Percent_of_Total__c,Include_in_CloudHub_Percent_of_Total__c,Include_in_ESB_Percent_of_Total__c,Include_in_Platinum_Support__c,IsActive,IsDeleted,LastModifiedById,LastModifiedDate,LastReferencedDate,LastViewedDate,License_Type__c,Line_Item_Group__c,Name,Priced_As_Percent_of_Total__c,Priced_Per_Thousand_Impressions__c,ProductCode,Product_Family_Type__c,Product_ID__c,Product_Tier__c,Requires_Legal_Approval__c,SBQQ_Custom_ID__c,SBQQ_External_ID__c,SBQQ__AssetConversion__c,SBQQ__BatchQuantity__c,SBQQ__BlockPricingField__c,SBQQ__Component__c,SBQQ__CompoundDiscountRate__c,SBQQ__ConfigurationEvent__c,SBQQ__ConfigurationFieldSet__c,SBQQ__ConfigurationFields__c,SBQQ__ConfigurationFormTitle__c,SBQQ__ConfigurationType__c,SBQQ__ConfigurationValidator__c,SBQQ__ConfiguredCodePattern__c,SBQQ__ConfiguredDescriptionPattern__c,SBQQ__CostEditable__c,SBQQ__CustomConfigurationPage__c,SBQQ__CustomConfigurationRequired__c,SBQQ__DefaultPricingTable__c,SBQQ__DefaultQuantity__c,SBQQ__DescriptionLocked__c,SBQQ__DiscountCategory__c,SBQQ__DiscountSchedule__c,SBQQ__DynamicPricingConstraint__c,SBQQ__ExcludeFromMaintenance__c,SBQQ__ExcludeFromOpportunity__c,SBQQ__GenerateContractedPrice__c,SBQQ__HasConfigurationAttributes__c,SBQQ__Hidden__c,SBQQ__HidePriceInSearchResults__c,SBQQ__IncludeInMaintenance__c,SBQQ__NewQuoteGroup__c,SBQQ__NonDiscountable__c,SBQQ__NonPartnerDiscountable__c,SBQQ__OptionLayout__c,SBQQ__OptionSelectionMethod__c,SBQQ__Optional__c,SBQQ__PriceEditable__c,SBQQ__PricingMethodEditable__c,SBQQ__PricingMethod__c,SBQQ__ProductPictureID__c,SBQQ__QuantityEditable__c,SBQQ__QuantityScale__c,SBQQ__ReconfigurationDisabled__c,SBQQ__RenewalProduct__c,SBQQ__RenewalProduct__r,SBQQ__SortOrder__c,SBQQ__Specifications__c,SBQQ__SubscriptionBase__c,SBQQ__SubscriptionCategory__c,SBQQ__SubscriptionPercent__c,SBQQ__SubscriptionPricing__c,SBQQ__SubscriptionTarget__c,SBQQ__SubscriptionTarget__r,SBQQ__SubscriptionTerm__c,SBQQ__SubscriptionType__c,SBQQ__Taxable__c,SBQQ__TermDiscountLevel__c,SBQQ__TermDiscountSchedule__c,SBQQ__UpgradeCredit__c,SBQQ__UpgradeCredit__r,SBQQ__UpgradeSource__c,SBQQ__UpgradeSource__r,SBQQ__UpgradeTarget__c,SBQQ__UpgradeTarget__r,Status__c,Support_Level__c,SystemModstamp,Type__c,fieldsToNull FROM Product2 WHERE Product_ID__c = '02i800000036ETKAA2'" doc:name="SFDC-NewQuotes_ClosedWonOpp"/>
-        <logger message="#[payload]" level="INFO" doc:name="Logger"/>
-        <expression-component doc:name="Expression"><![CDATA[#[message.payload.hasNext() ? message.payload.next() : null]]]></expression-component>
-        <object-to-string-transformer doc:name="Object to String"/>
-        <logger message="#[payload]" level="INFO" doc:name="Logger"/>
+		<http:listener config-ref="HTTP_Listener_Configuration"
+			path="/" doc:name="HTTP" />
+		<sfdc:query config-ref="Salesforce__Basic_Authentication"
+			query="dsql:SELECT Applicable_Partner_Discount__c,Approval_Reason__c,Category__c,Comp_Category_DELETE1__c,Compensation_Category_Product__c,CreatedById,CreatedDate,CurrencyIsoCode,DMAPP__AM_Solution__c,Delivery__c,Description,Discount_Approval_Tier_1_Threshold__c,Discount_Approval_Tier_2_Threshold__c,Discount_Approval_Tier_3_Threshold__c,Discount_Approval_Tier_4_Threshold__c,ELA__c,Family,Id,Include_in_AnyPoint_Percent_of_Total__c,Include_in_CloudHub_Percent_of_Total__c,Include_in_ESB_Percent_of_Total__c,Include_in_Platinum_Support__c,IsActive,IsDeleted,LastModifiedById,LastModifiedDate,LastReferencedDate,LastViewedDate,License_Type__c,Line_Item_Group__c,Name,Priced_As_Percent_of_Total__c,Priced_Per_Thousand_Impressions__c,ProductCode,Product_Family_Type__c,Product_ID__c,Product_Tier__c,Requires_Legal_Approval__c,SBQQ_Custom_ID__c,SBQQ_External_ID__c,SBQQ__AssetConversion__c,SBQQ__BatchQuantity__c,SBQQ__BlockPricingField__c,SBQQ__Component__c,SBQQ__CompoundDiscountRate__c,SBQQ__ConfigurationEvent__c,SBQQ__ConfigurationFieldSet__c,SBQQ__ConfigurationFields__c,SBQQ__ConfigurationFormTitle__c,SBQQ__ConfigurationType__c,SBQQ__ConfigurationValidator__c,SBQQ__ConfiguredCodePattern__c,SBQQ__ConfiguredDescriptionPattern__c,SBQQ__CostEditable__c,SBQQ__CustomConfigurationPage__c,SBQQ__CustomConfigurationRequired__c,SBQQ__DefaultPricingTable__c,SBQQ__DefaultQuantity__c,SBQQ__DescriptionLocked__c,SBQQ__DiscountCategory__c,SBQQ__DiscountSchedule__c,SBQQ__DynamicPricingConstraint__c,SBQQ__ExcludeFromMaintenance__c,SBQQ__ExcludeFromOpportunity__c,SBQQ__GenerateContractedPrice__c,SBQQ__HasConfigurationAttributes__c,SBQQ__Hidden__c,SBQQ__HidePriceInSearchResults__c,SBQQ__IncludeInMaintenance__c,SBQQ__NewQuoteGroup__c,SBQQ__NonDiscountable__c,SBQQ__NonPartnerDiscountable__c,SBQQ__OptionLayout__c,SBQQ__OptionSelectionMethod__c,SBQQ__Optional__c,SBQQ__PriceEditable__c,SBQQ__PricingMethodEditable__c,SBQQ__PricingMethod__c,SBQQ__ProductPictureID__c,SBQQ__QuantityEditable__c,SBQQ__QuantityScale__c,SBQQ__ReconfigurationDisabled__c,SBQQ__RenewalProduct__c,SBQQ__RenewalProduct__r,SBQQ__SortOrder__c,SBQQ__Specifications__c,SBQQ__SubscriptionBase__c,SBQQ__SubscriptionCategory__c,SBQQ__SubscriptionPercent__c,SBQQ__SubscriptionPricing__c,SBQQ__SubscriptionTarget__c,SBQQ__SubscriptionTarget__r,SBQQ__SubscriptionTerm__c,SBQQ__SubscriptionType__c,SBQQ__Taxable__c,SBQQ__TermDiscountLevel__c,SBQQ__TermDiscountSchedule__c,SBQQ__UpgradeCredit__c,SBQQ__UpgradeCredit__r,SBQQ__UpgradeSource__c,SBQQ__UpgradeSource__r,SBQQ__UpgradeTarget__c,SBQQ__UpgradeTarget__r,Status__c,Support_Level__c,SystemModstamp,Type__c,fieldsToNull FROM Product2 WHERE Product_ID__c = '02i800000036ETKAA2'"
+			doc:name="SFDC-NewQuotes_ClosedWonOpp" />
+		<logger message="#[payload]" level="INFO" doc:name="Logger" />
+		<expression-component doc:name="Expression"><![CDATA[#[message.payload.hasNext() ? message.payload.next() : null]]]></expression-component>
+		<object-to-string-transformer doc:name="Object to String" />
+		<logger message="#[payload]" level="INFO" doc:name="Logger" />
 	</flow>
-    <flow name="sfdc-query-checkFlow1">
-        <http:listener config-ref="HTTP_Listener_Configuration" path="/put" doc:name="HTTP"/>
-        <scripting:transformer doc:name="Groovy">
-            <scripting:script engine="Groovy"><![CDATA[Map updateAccount = [
+	<flow name="sfdc-query-checkFlow3">
+		<sfdc:upsert config-ref="Salesforce__Basic_Authentication"
+			externalIdFieldName="Id" type="Attachment" doc:name="Salesforce">
+			<sfdc:objects ref="#[payload]" />
+		</sfdc:upsert>
+	</flow>
+	<flow name="sfdc-query-checkFlow1">
+		<http:listener config-ref="HTTP_Listener_Configuration"
+			path="/put" doc:name="HTTP" />
+		<scripting:transformer doc:name="Groovy">
+			<scripting:script engine="Groovy"><![CDATA[Map updateAccount = [
 	'Id':'',
 	'Account__c': '00129000009CK4s', 
 	'CSId__c': '12345',
@@ -41,49 +62,120 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 	];
 	
 	flowVars['updateAccount'] = [updateAccount];]]></scripting:script>
-        </scripting:transformer>
-        <sfdc:upsert config-ref="Salesforce__Basic_Authentication" externalIdFieldName="Id" type="AnypointOrganization__c" doc:name="Salesforce">
-            <sfdc:objects ref="#[flowVars.updateAccount]"/>
-        </sfdc:upsert>
-        <logger message="sfdc result #[payload]" level="INFO" doc:name="Copy_of_Logger"/>
-    </flow>
-    <flow name="sfdc-query-checkFlow2">
-        <file:inbound-endpoint path="/Users/brandongrantham/projects/sfdc-query-check/src/main/resources/in" connector-ref="File" pollingFrequency="1000000" responseTimeout="10000" doc:name="File"/>
-        <file:file-to-byte-array-transformer doc:name="File to Byte Array"/>
-        <set-variable variableName="file" value="#[payload]" doc:name="file"/>
-        <set-payload value="{&quot;entitlements&quot;:&quot;mulemq,clustering,datamapper,sap-connector,hl7,siebel-connector,oracleebs-connector,peoplesoft-connector,api-gateway,epicbridges-connector,as2,ftps,x12,edifact,b2b&quot;,&quot;country&quot;:&quot;US&quot;,&quot;product&quot;:&quot;mule-ee&quot;,&quot;companyId&quot;:&quot;00129000009CK4sAAG&quot;,&quot;month&quot;:&quot;01&quot;,&quot;phone&quot;:&quot;123-321-4444&quot;,&quot;year&quot;:&quot;2019&quot;,&quot;name&quot;:&quot;jose&quot;,&quot;company&quot;:&quot;Jose's Cigar Bar&quot;,&quot;day&quot;:&quot;01&quot;,&quot;email&quot;:&quot;Fidel.castro@yahoo.com&quot;}" doc:name="JSON"/>
-        <logger message="******* Preceding license object data #[payload]" level="INFO" doc:name="Logger"/>
-        <dw:transform-message doc:name="Transform Message" metadata:id="92020db9-a830-436d-ba28-32d9d41c41a9">
-            <dw:input-payload mimeType="application/json"/>
-            <dw:set-payload><![CDATA[%dw 1.0
-%var dayformat = '/' ++ now.day ++ '/'
-%var nextYear = now.year as :number + 1
+		</scripting:transformer>
+		<sfdc:upsert config-ref="Salesforce__Basic_Authentication"
+			externalIdFieldName="Id" type="AnypointOrganization__c" doc:name="Salesforce">
+			<sfdc:objects ref="#[flowVars.updateAccount]" />
+		</sfdc:upsert>
+		<logger message="sfdc result #[payload]" level="INFO" doc:name="Copy_of_Logger" />
+	</flow>
+
+	<flow name="sfdc-query-all">
+		<http:listener config-ref="HTTP_Listener_Configuration"
+			path="query" doc:name="HTTP" />
+			<dw:transform-message doc:name="Transform Message"
+			metadata:id="92020db9-a830-436d-ba28-32d9d41c41a9">
+			<dw:input-payload mimeType="application/json" />
+			<dw:set-payload><![CDATA[%dw 1.0
 %output application/java
 ---
-{
-	Product__c:'02i800000036ETKAA2',
-	Expiration_Date__c: '2018-03-14' as :date,
-	Issue_Date__c: '2014-03-14' as :date,
-	License_Type__c:'Production'
-}]]></dw:set-payload>
-        </dw:transform-message>
-        <logger message="Create Attachment Result is #[payload]" level="INFO" doc:name="Logger"/>
-        <enricher target="#[flowVars['LicenseObject']]" doc:name="Message Enricher">
-            <sfdc:create-single config-ref="Salesforce__Basic_Authentication" type="License__c" doc:name="Salesforce"/>
-        </enricher>
-        <logger message="transformed string #[payload]" level="INFO" doc:name="Copy_of_Logger"/>
-        <expression-component doc:name="Expression"><![CDATA[littleList = new java.util.ArrayList();
+[{
+      "Category__c": "Subscription",
+      "SBQQ__Quote__c": "a4a290000009Gu2",
+      "SBQQ__Quantity__c":1,
+      "ProductCode":"PLATINUMSUB"
+      
+}]
+]]></dw:set-payload>
+		</dw:transform-message>
+        <sfdc:query config-ref="Salesforce__Basic_Authentication" query="dsql:SELECT Category__c,ProductCode,Product_ID__c FROM Product2 WHERE Category__c = 'Subscription'" doc:name="findProducts"/>
+        <foreach doc:name="For Each">
+            <dw:transform-message doc:name="Transform Message">
+                <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+---
+payload]]></dw:set-payload>
+            </dw:transform-message>
+            <processor-chain doc:name="Processor Chain">
+                <http:request config-ref="HTTP_Request_Configuration" path="store/create/item" method="POST" doc:name="HTTP">
+                    <http:request-builder>
+                        <http:header headerName="x-db-collection" value="products"/>
+                        <http:header headerName="Content-Type" value="application/json"/>
+                    </http:request-builder>
+                </http:request>
+            </processor-chain>
+            <logger message="products #[payload]" level="INFO" doc:name="Logger"/>
+        </foreach>
+	</flow>
+	<flow name="sfdc-create-item">
+		<http:listener config-ref="HTTP_Listener_Configuration"
+			path="/test" doc:name="HTTP" />
+		<logger message="******* Preceding license object data #[payload]"
+			level="INFO" doc:name="Logger" />
+		<dw:transform-message doc:name="Transform Message"
+			metadata:id="92020db9-a830-436d-ba28-32d9d41c41a9">
+			<dw:input-payload mimeType="application/json" />
+			<dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+---
+[{
+      "Category__c": "Subscription",
+      "SBQQ__Quote__c": "a4a290000009Gu2",
+      "SBQQ__Product__c":"01t34000003wGJV"
+}]
+]]></dw:set-payload>
+		</dw:transform-message>
+		<logger message="Create Attachment Result is #[payload]" level="INFO"
+			doc:name="Logger" />
+		<enricher target="#[flowVars.sfdc]" doc:name="Message Enricher">
+			<sfdc:upsert config-ref="Salesforce__Basic_Authentication"
+				externalIdFieldName="Id" type="SBQQ__QuoteLine__c" doc:name="Salesforce">
+				<sfdc:objects ref="#[payload]" />
+			</sfdc:upsert>
+		</enricher>
+		<logger message="transformed string #[payload]" level="INFO"
+			doc:name="Copy_of_Logger" />
+		<expression-component doc:name="Expression"><![CDATA[littleList = new java.util.ArrayList();
 flowVars['littleList'] = littleList;
 flowVars.littleList.add(flowVars.LicenseObject.id);
 flowVars.littleList.add(flowVars.file);]]></expression-component>
-        <logger message="transformed string #[payload]" level="INFO" doc:name="Logger"/>
-        <set-payload value="#[flowVars.littleList]" doc:name="Set Payload"/>
-        <sfdc:create config-ref="Salesforce__Basic_Authentication" type="Attachment" doc:name="Salesforce">
-            <sfdc:objects />
-        </sfdc:create>
-        <logger message="SFDC RESult #[payload]" level="INFO" doc:name="Logger"/>
-        
-        <!-- <custom-transformer class="com.mulesoft.licensegen.AttachmentToBase64Transformer" doc:name="Java"/>
-        <sfdc:create-single config-ref="Salesforce__Basic_Authentication" type="Attachment" doc:name="Salesforce"/> -->
+		<logger message="transformed string #[payload]" level="INFO"
+			doc:name="Logger" />
+		<set-payload value="#[flowVars.littleList]" doc:name="Set Payload" />
+		<sfdc:create config-ref="Salesforce__Basic_Authentication"
+			type="Attachment" doc:name="Salesforce">
+			<sfdc:objects />
+		</sfdc:create>
+		<logger message="SFDC RESult #[payload]" level="INFO" doc:name="Logger" />
+
+		<!-- <custom-transformer class="com.mulesoft.licensegen.AttachmentToBase64Transformer" 
+			doc:name="Java"/> <sfdc:create-single config-ref="Salesforce__Basic_Authentication" 
+			type="Attachment" doc:name="Salesforce"/> -->
+	</flow>
+    <flow name="sfdc-create-subscription">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/sub" doc:name="Copy_of_HTTP"/>
+        <logger message="******* Preceding license object data #[payload]" level="INFO" doc:name="Copy_of_Logger"/>
+        <dw:transform-message metadata:id="92020db9-a830-436d-ba28-32d9d41c41a9" doc:name="Copy_of_Transform Message">
+            <dw:input-payload mimeType="application/json"/>
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+---
+[{
+     SBQQ__QuoteLine__c:'a4W290000004oTK',
+     SBQQ__Product__c: '01t34000003wGJV',
+     SBQQ__Contract__c:'80029000000AqXGAA0',
+     SBQQ__Quantity__c:'1',
+     SBQQ__Account__c:'0012900000ADZnJ'
+}
+]
+]]></dw:set-payload>
+        </dw:transform-message>
+        <logger message="Create Attachment Result is #[payload]" level="INFO" doc:name="Copy_of_Logger"/>
+        <enricher target="#[flowVars.sfdc]" doc:name="CreateSubscription">
+            <sfdc:upsert config-ref="Salesforce__Basic_Authentication" externalIdFieldName="Id" type="SBQQ__Subscription__c" doc:name="Copy_of_Salesforce">
+                <sfdc:objects ref="#[payload]"/>
+            </sfdc:upsert>
+        </enricher>
+        <logger message="transformed string #[flowVars.sfdc]" level="INFO" doc:name="Copy_of_Copy_of_Logger"/>
     </flow>
 </mule>

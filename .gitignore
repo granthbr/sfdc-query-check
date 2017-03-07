@@ -49,3 +49,5 @@ target/
 catalog/*
 .DS_Store
 mule.dev.properties
+src/main/resources/credentials.dev.properties
+src/main/resources/in/AttachmentToBase64Transformer.java

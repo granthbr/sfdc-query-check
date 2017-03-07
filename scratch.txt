@@ -1,0 +1,10 @@
+%dw 1.0
+%output application/java
+---
+[{
+      "Category__c": "Subscription",
+      SBQQ__Product__r: {
+      ProductCode:"PLATINUMSUB"
+      },
+      "SBQQ__Quote__c": "a4a290000009Gu2"
+}]
