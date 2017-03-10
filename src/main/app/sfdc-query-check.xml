@@ -119,17 +119,22 @@ payload]]></dw:set-payload>
 %output application/java
 ---
 [{
-      "Category__c": "Subscription",
-      "SBQQ__Quote__c": "a4a290000009Gu2",
-      "SBQQ__Product__c":"01t34000003wGJV"
-}]
+    Account: '00129000009f4cX',
+    forecast__c: 'Closed',
+    CloseDate:"2017-03-09" as :date {format: "yyyy-MM-dd"},
+    ForecastCategoryName: "Closed",
+    Name:"Opportunity Test 2515",
+    StageName: "Closed Won",
+    Swimlane__c: "Outbound AE - New",
+    ContractId:"00004219" as :number
+  }]
 ]]></dw:set-payload>
 		</dw:transform-message>
 		<logger message="Create Attachment Result is #[payload]" level="INFO"
 			doc:name="Logger" />
 		<enricher target="#[flowVars.sfdc]" doc:name="Message Enricher">
 			<sfdc:upsert config-ref="Salesforce__Basic_Authentication"
-				externalIdFieldName="Id" type="SBQQ__QuoteLine__c" doc:name="Salesforce">
+				externalIdFieldName="Id" type="Opportunity" doc:name="Salesforce">
 				<sfdc:objects ref="#[payload]" />
 			</sfdc:upsert>
 		</enricher>
