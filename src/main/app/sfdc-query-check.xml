@@ -88,7 +88,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 }]
 ]]></dw:set-payload>
 		</dw:transform-message>
-        <sfdc:query config-ref="Salesforce__Basic_Authentication" query="dsql:SELECT Category__c,ProductCode,Product_ID__c FROM Product2 WHERE Category__c = 'Subscription'" doc:name="findProducts"/>
+        <sfdc:query config-ref="Salesforce__Basic_Authentication" query="dsql:SELECT ContractId,Mule_Versions_in_Production__c,Name,Subscription_Product__c,Type FROM Opportunity" doc:name="findProducts"/>
         <foreach doc:name="For Each">
             <dw:transform-message doc:name="Transform Message">
                 <dw:set-payload><![CDATA[%dw 1.0
